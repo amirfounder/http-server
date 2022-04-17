@@ -31,11 +31,11 @@ class BaseHttpServer:
 
         CORS(self.app)
     
-    def register_services(self, services: List[BaseHttpEndpointAdapter]):
+    def register_endpoint_adapters(self, services: List[BaseHttpEndpointAdapter]):
         for service in services:
-            self.register_service(service)
+            self.register_endpoint_adapter(service)
 
-    def register_service(self, service: BaseHttpEndpointAdapter):
+    def register_endpoint_adapter(self, service: BaseHttpEndpointAdapter):
         route = service.route
         method = service.method.value
         
