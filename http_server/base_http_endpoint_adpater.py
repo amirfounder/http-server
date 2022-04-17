@@ -7,11 +7,11 @@ from http_server.http_methods import HttpMethods
 T = TypeVar('T')
 
 
-class AbstractHttpServiceAdapter(Generic[T], ABC):
-    def __init__(self, route: str, method: HttpMethods, adaptee: T):
+class BaseHttpEndpointAdapter(Generic[T], ABC):
+    def __init__(self, route: str, method: HttpMethods, service: T):
         self.method = method
         self.route = route
-        self.adaptee = adaptee
+        self.service = service
 
     @abstractmethod
     def run(self, params: Dict):
