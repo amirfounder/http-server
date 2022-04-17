@@ -1,4 +1,4 @@
-from typing import Dict, Type, Any, Optional
+from typing import Dict, Type
 
 from flask import Flask, request
 from flask_cors import CORS
@@ -29,14 +29,12 @@ class HttpServer:
 
         CORS(self.app)
 
-    def register_service(self, service_cls: Type[HttpService], service_params: Optional[Dict[str, Any]] = None):
-        service = service_cls(**service_params if service_params else {})
-        if service.route in self.services and service.method in self.services[service.route]:
-            raise Exception('Service already registered')
-        if service.route not in self.services:
-            self.services[service.route] = {}
-        if service.method not in self.services[service.route]:
-            self.services[service.route][service.method] = service
+    def register_service(self, service_cls: Type[HttpService], service_params: Dict):
+        service = service_cls(service_params)
+        if (route := service.route) not in self.services:
+            self.services[route] = {}
+        if (method := service.method) not in self.services[route]:
+            self.services[route][method] = service
 
     def run(self):
         for route in self.services:
