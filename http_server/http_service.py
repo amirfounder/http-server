@@ -14,5 +14,5 @@ class AbstractHttpServiceAdapter(Generic[T], ABC):
         self.adaptee = adaptee
 
     @abstractmethod
-    def run(self, params: Dict[str]):
+    def run(self, params: Dict):
         pass

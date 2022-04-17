@@ -5,18 +5,18 @@ from flask_cors import CORS
 
 from http_server.http_methods import HttpMethods
 from http_server.exceptions import HttpException, NotAllowedException
-from http_server.http_service import HttpService
+from http_server.http_service import AbstractHttpServiceAdapter
 
 
 class HttpServerController:
-    def __init__(self, route: str, method_service_map: Dict[str, HttpService]):
+    def __init__(self, route: str, method_service_map: Dict[str, AbstractHttpServiceAdapter]):
         self.route = route
         self.method_service_map = method_service_map
 
-    def on_request(self, _request: request):
+    def on_request(self):
         try:
-            if service := self.method_service_map.get(_request.method):
-                return service.run(_request)
+            if service := self.method_service_map.get(request.method):
+                return service.run(request.json if request.is_json else {})
             raise NotAllowedException()
         except HttpException as e:
             return e.dict()
@@ -25,17 +25,17 @@ class HttpServerController:
 class HttpServer:
     def __init__(self, port: int = 8080):
         self.app: Flask = Flask(__name__)
-        self.services: Dict[str, Dict[str, HttpService]] = {}
+        self.services: Dict[str, Dict[str, AbstractHttpServiceAdapter]] = {}
         self.port = port
         self.is_service_routing_setup = False
 
         CORS(self.app)
     
-    def register_services(self, services: List[HttpService]):
+    def register_services(self, services: List[AbstractHttpServiceAdapter]):
         for service in services:
             self.register_service(service)
 
-    def register_service(self, service: HttpService):
+    def register_service(self, service: AbstractHttpServiceAdapter):
         route = service.route
         method = service.method.value
         
