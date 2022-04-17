@@ -3,3 +3,4 @@
 .pytest_cache/
 venv/
 dependency_injection.egg-info/
+http_server.egg-info/

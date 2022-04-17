@@ -3,9 +3,9 @@ from typing import Dict, Type, Any, Optional
 from flask import Flask, request
 from flask_cors import CORS
 
-from commons.http_server.enums import HttpMethods
-from commons.http_server.exceptions import HttpException, NotAllowedException
-from commons.http_server.http_service import HttpService
+from http_server.http_methods import HttpMethods
+from http_server.exceptions import HttpException, NotAllowedException
+from http_server.http_service import HttpService
 
 
 class HttpController:
