@@ -1,14 +1,14 @@
 from abc import ABC, abstractmethod
 from typing import Generic, TypeVar, Dict
 
-from http_server.http_methods import HttpMethods
+from http_server.methods import HttpMethod
 
 
 T = TypeVar('T')
 
 
-class BaseHttpEndpointAdapter(Generic[T], ABC):
-    def __init__(self, route: str, method: HttpMethods, service: T):
+class BaseHttpEndpointServiceAdapter(Generic[T], ABC):
+    def __init__(self, route: str, method: HttpMethod, service: T):
         self.method = method
         self.route = route
         self.service = service
