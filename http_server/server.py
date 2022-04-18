@@ -56,10 +56,10 @@ class BaseHttpServer(ABC):
         Handles incoming request
         :return:
         """
+        path = request.path
+        method = request.method
+        params = request.json if request.is_json else {}
         try:
-            path = request.path
-            method = request.method
-            params = request.json if request.is_json else {}
             return self.services[path][method].run(params)
         except BaseHttpException as e:
             return e.dict()
