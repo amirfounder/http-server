@@ -11,27 +11,27 @@ class BaseService(ABC):
         pass
 
 
-class Service(BaseService):
+class ConcreteService(BaseService):
     def perform(self, params: Dict):
         return 'Haha'
 
 
-class HttpEndpointServiceAdapter(BaseHttpEndpointServiceAdapter[BaseService]):
+class ConcreteHttpEndpointServiceAdapter(BaseHttpEndpointServiceAdapter[BaseService]):
     def run(self, params: Dict):
         return self.service.perform(params)
 
 
-class HttpServer(BaseHttpServer):
+class ConcreteHttpServer(BaseHttpServer):
     def __init__(self):
         super().__init__(port=8081)
 
 
 SERVICES = [
-    HttpEndpointServiceAdapter('/', HttpMethod.POST, Service())
+    ConcreteHttpEndpointServiceAdapter('/', HttpMethod.POST, ConcreteService())
 ]
 
 
 if __name__ == '__main__':
-    server = HttpServer()
+    server = ConcreteHttpServer()
     server.register_services(SERVICES)
     server.run()

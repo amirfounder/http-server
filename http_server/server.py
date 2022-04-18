@@ -48,8 +48,9 @@ class BaseHttpServer(ABC):
         if not is_method_registered:
             self.services[route][method] = service
             return
-        
-        raise Exception(f'Service already registered under route, method : {route} {method}')
+
+        else:
+            raise Exception(f'Service already registered under route, method : {route} {method}')
 
     def handle_request(self) -> Dict | None:
         """
