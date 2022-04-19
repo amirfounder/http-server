@@ -4,7 +4,6 @@ from typing import Dict, List
 from flask import Flask, request
 from flask_cors import CORS
 
-from http_server.exceptions import BaseHttpException
 from http_server.adapter import BaseHttpEndpointServiceAdapter
 
 
@@ -60,11 +59,8 @@ class BaseHttpServer(ABC):
         path = request.path
         method = request.method
         params = request.json if request.is_json else {}
-        try:
-            return self.services[path][method].run(params)
-        except BaseHttpException as e:
-            return e.dict()
-            
+        return self.services[path][method].run(params)
+
     def setup_service_routing(self) -> None:
         """
         Routes every service registered in self into Flask's API routing controller.
