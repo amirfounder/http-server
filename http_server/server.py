@@ -78,8 +78,8 @@ class BaseHttpServer(ABC):
 
         return {
             'status': 'SUCCESS',
-            'service_id': getattr(service.service, 'service_id'),
-            'service_suite_id': getattr(service.service, 'service_suite_id'),
+            'service_id': getattr(service.service, 'service_id', None),
+            'service_suite_id': getattr(service.service, 'service_suite_id', None),
             'request_data': {
                 'path': path,
                 'method': method,
