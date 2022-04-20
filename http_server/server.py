@@ -82,7 +82,8 @@ class BaseHttpServer(ABC):
                 'path': path,
                 'method': method,
                 'params': params,
-                'service': str(service)
+                'service_id': getattr(service.service, 'service_id'),
+                'service_suite_id': getattr(service.service, 'service_suite_id')
             },
             'response_data': response,
             'performance': {
