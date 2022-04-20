@@ -77,7 +77,7 @@ class BaseHttpServer(ABC):
                 params[k] = v[:self.config['TRUNCATED_LENGTH'] - 3] + '...'
 
         return {
-            'status': 'DONE',
+            'status': 'SUCCESS',
             'service_id': getattr(service.service, 'service_id'),
             'service_suite_id': getattr(service.service, 'service_suite_id'),
             'request_data': {
