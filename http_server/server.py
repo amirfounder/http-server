@@ -19,6 +19,8 @@ class BaseHttpServer(ABC):
         self.port = port
         self.is_service_routing_setup = False
 
+        self.config = {'TRUNCATED_LENGTH': 50}
+
         CORS(self.app)
     
     def register_services(self, services: List[BaseHttpEndpointServiceAdapter]) -> None:
@@ -63,13 +65,6 @@ class BaseHttpServer(ABC):
         params = request.json if request.is_json else {}
         service = self.services[path][method]
 
-        request_data = {
-            'path': path,
-            'method': method,
-            'params': params,
-            'service': str(service)
-        }
-
         start = datetime.now()
 
         response_data = self.services[path][method].run(params)
@@ -77,10 +72,21 @@ class BaseHttpServer(ABC):
         end = datetime.now()
         elapsed = end - start
 
+        for k, v in params.items():
+            if isinstance(v, str) and len(v) > self.config['TRUNCATED_LENGTH']:
+                params[k] = v[:self.config['TRUNCATED_LENGTH'] - 3] + '...'
+
         performance = {
             start: start.isoformat(),
             end: end.isoformat(),
             elapsed: str(elapsed)
+        }
+
+        request_data = {
+            'path': path,
+            'method': method,
+            'params': params,
+            'service': str(service)
         }
 
         return {
