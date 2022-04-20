@@ -67,7 +67,7 @@ class BaseHttpServer(ABC):
 
         start = datetime.now()
 
-        response_data = self.services[path][method].run(params)
+        response = self.services[path][method].run(params)
 
         end = datetime.now()
         elapsed = end - start
@@ -76,24 +76,20 @@ class BaseHttpServer(ABC):
             if isinstance(v, str) and len(v) > self.config['TRUNCATED_LENGTH']:
                 params[k] = v[:self.config['TRUNCATED_LENGTH'] - 3] + '...'
 
-        performance = {
-            start: start.isoformat(),
-            end: end.isoformat(),
-            elapsed: str(elapsed)
-        }
-
-        request_data = {
-            'path': path,
-            'method': method,
-            'params': params,
-            'service': str(service)
-        }
-
         return {
             'status': 'DONE',
-            'request_data': request_data,
-            'response_data': response_data,
-            'performance': performance
+            'request_data': {
+                'path': path,
+                'method': method,
+                'params': params,
+                'service': str(service)
+            },
+            'response_data': response,
+            'performance': {
+                'start': start.isoformat(),
+                'end': end.isoformat(),
+                'elapsed': str(elapsed)
+            }
         }
 
     def setup_service_routing(self) -> None:
