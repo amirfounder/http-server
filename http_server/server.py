@@ -13,6 +13,7 @@ class BaseHttpServer(ABC):
     """
     def __init__(self, port: int = 8080):
         self.app: Flask = Flask(__name__)
+        self.app.config['JSON_SORT_KEYS'] = False
         self.services: Dict[str, Dict[str, BaseHttpEndpointServiceAdapter]] = {}
         self.port = port
         self.is_service_routing_setup = False
