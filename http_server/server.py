@@ -78,18 +78,18 @@ class BaseHttpServer(ABC):
 
         return {
             'status': 'DONE',
+            'service_id': getattr(service.service, 'service_id'),
+            'service_suite_id': getattr(service.service, 'service_suite_id'),
             'request_data': {
                 'path': path,
                 'method': method,
                 'params': params,
-                'service_id': getattr(service.service, 'service_id'),
-                'service_suite_id': getattr(service.service, 'service_suite_id')
             },
             'response_data': response,
             'performance': {
                 'start': start.isoformat(),
                 'end': end.isoformat(),
-                'elapsed': str(elapsed)
+                'elapsed': str(elapsed),
             }
         }
 
