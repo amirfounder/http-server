@@ -1,4 +1,5 @@
 from abc import ABC
+from datetime import datetime
 from typing import Dict, List
 
 from flask import Flask, request
@@ -60,7 +61,34 @@ class BaseHttpServer(ABC):
         path = request.path
         method = request.method
         params = request.json if request.is_json else {}
-        return self.services[path][method].run(params)
+        service = self.services[path][method]
+
+        request_data = {
+            'path': path,
+            'method': method,
+            'params': params,
+            'service': str(service)
+        }
+
+        start = datetime.now()
+
+        response_data = self.services[path][method].run(params)
+
+        end = datetime.now()
+        elapsed = end - start
+
+        performance = {
+            start: start.isoformat(),
+            end: end.isoformat(),
+            elapsed: str(elapsed)
+        }
+
+        return {
+            'status': 'DONE',
+            'request_data': request_data,
+            'response_data': response_data,
+            'performance': performance
+        }
 
     def setup_service_routing(self) -> None:
         """
